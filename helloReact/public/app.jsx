@@ -15,19 +15,24 @@ let GreeterForm = React.createClass({
   onFormSubmit: function(e) {
     e.preventDefault();
 
-    let value = this.refs.name.value;
+    let name = this.refs.name.value;
+    let message = this.refs.message.value;
 
-    if(value.length > 0){
+    if(name.length > 0 && message.length > 0){
       this.refs.name.value = '';
-      this.props.onNewName(value);
+      this.refs.message.value = '';
+      this.props.onNewData(name, message);
     }
 
   },
   render: function() {
     return (
       <form onSubmit={this.onFormSubmit}>
-        <input type="text" ref="name"/>
-        <button>Set name</button>
+        <input type="text" ref="name" placeholder="Enter name"/>
+        <br/>
+        <textarea ref="message" placeholder="Enter message"></textarea>
+        <br/>
+        <button>Submit</button>
       </form>
     );
   }
@@ -37,33 +42,34 @@ let Greeter = React.createClass({
   getDefaultProps: function(){
     return {
       name: 'React',
-      message: 'This is from the component.'
+      message: 'This is the default message.'
     };
   },
   getInitialState: function(){
     return {
-      name: this.props.name
+      name: this.props.name,
+      message: this.props.message
     };
   },
-  handleNewName: function(name) {
+  handleNewData: function(name, message) {
     this.setState({
-      name: name
+      name,
+      message
     });
   },
   render: function (){
     let name =  this.state.name;
+    let message = this.state.message;
     return (
       <div>
-        <GreeterMessage name={name} message={this.props.message}/>
-        <GreeterForm onNewName={this.handleNewName}/>
+        <GreeterMessage name={name} message={message}/>
+        <GreeterForm onNewData={this.handleNewData}/>
       </div>
     );
   }
 });
 
-let name = 'Samara';
-
 ReactDOM.render(
-  <Greeter name={name} message='This is from the main component!'/>,
+  <Greeter />,
   document.getElementById('app')
 );
