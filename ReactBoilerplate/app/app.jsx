@@ -1,8 +1,7 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
-let Greeter = require('Greeter');
 
 ReactDOM.render(
-  <Greeter name='Test webpack' />,
+  <h1>Boilerplate app!</h1>,
   document.getElementById('app')
 );
