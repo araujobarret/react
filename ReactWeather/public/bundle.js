@@ -24937,7 +24937,21 @@
 	var Weather = React.createClass({
 	  displayName: 'Weather',
 
+	  getInitialState: function getInitialState() {
+	    return {
+	      location: 'Rio de Janeiro',
+	      temp: 30
+	    };
+	  },
+	  handleSearch: function handleSearch(location) {
+	    this.setState({
+	      location: location,
+	      temp: 40
+	    });
+	  },
 	  render: function render() {
+	    var location = this.state.location;
+	    var temp = this.state.temp;
 	    return React.createElement(
 	      'div',
 	      null,
@@ -24946,8 +24960,8 @@
 	        null,
 	        'Weather Component'
 	      ),
-	      React.createElement(WeatherForm, null),
-	      React.createElement(WeatherMessage, null)
+	      React.createElement(WeatherForm, { onSearch: this.handleSearch }),
+	      React.createElement(WeatherMessage, { location: location, temp: temp })
 	    );
 	  }
 	});
@@ -24958,22 +24972,33 @@
 /* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var React = __webpack_require__(1);
+	var app_id = 'd241eac0ecd3e0efab18a707816bd926';
 
 	var WeatherForm = React.createClass({
-	  displayName: "WeatherForm",
+	  displayName: 'WeatherForm',
 
+	  onFormSubmit: function onFormSubmit(e) {
+	    e.preventDefault();
+
+	    var location = this.refs.location.value;
+
+	    if (location.length > 0) {
+	      this.refs.location.value = '';
+	      this.props.onSearch(location);
+	    }
+	  },
 	  render: function render() {
 	    return React.createElement(
-	      "form",
-	      null,
-	      React.createElement("input", { type: "text" }),
+	      'form',
+	      { onSubmit: this.onFormSubmit },
+	      React.createElement('input', { type: 'text', ref: 'location' }),
 	      React.createElement(
-	        "button",
+	        'button',
 	        null,
-	        "Get Weather"
+	        'Get Weather'
 	      )
 	    );
 	  }
@@ -24993,10 +25018,15 @@
 	  displayName: 'WeatherMessage',
 
 	  render: function render() {
+	    var location = this.props.location;
+	    var temp = this.props.temp;
 	    return React.createElement(
 	      'p',
 	      null,
-	      'Weather Message'
+	      'Location ',
+	      this.props.location,
+	      ', temperature ',
+	      this.props.temp
 	    );
 	  }
 	});
