@@ -3,43 +3,81 @@ const React = require('react');
 let WeatherForm = require('WeatherForm');
 let WeatherMessage = require('WeatherMessage');
 let OpenWeatherMap = require('openWeatherMap');
+let ErrorModal = require('ErrorModal');
 
 let Weather = React.createClass({
   getInitialState: function(){
     return {
-      isLoading: false
+      isLoading: false,
+      errorMessage: null
     }
   },
   handleSearch: function(location){
-    this.setState({isLoading: true});
+    this.setState({
+      isLoading: true,
+      errorMessage: null,
+      location: null,
+      temp: null
+    });
 
     OpenWeatherMap.getTemp(location)
     .then((temp) => {
       this.setState({
         location,
-        temp
+        temp,
+        isLoading: false
       });
-      this.setState({isLoading: false});
-    }).catch(e => console.log(e));
+    }).catch((e) => {
+      this.setState({
+        isLoading: false,
+        errorMessage: e.toString()
+      });
+    });
+  },
+  componentDidMount: function(){
+    let location = this.props.location.query.location;
+
+    if(location && location.length > 0){
+      this.handleSearch(location);
+      window.location.hash = '#/';
+    }
+  },
+  componentWillReceiveProps: function(newProps){
+    let location = newProps.location.query.location;
+
+    if(location && location.length > 0){
+      this.handleSearch(location);
+      window.location.hash= '#/';
+    }
   },
   render: function() {
     let location = this.state.location;
     let temp = this.state.temp;
     let isLoading = this.state.isLoading;
+    let errorMessage = this.state.errorMessage;
 
-    function renderMessage() {      
+    function renderMessage() {
       if(isLoading)
-        return <h3>Fetching weather...</h3>;
+        return <h3 className="text-center">Fetching weather...</h3>;
       else
         if(temp && location)
           return <WeatherMessage location={location} temp={temp}/>;
     };
 
+    let renderError = () => {
+      if(errorMessage){
+        return (
+          <ErrorModal message={errorMessage}/>
+        );
+      }
+    }
+
     return (
       <div>
-        <h3>Weather Component</h3>
+        <h1 className="text-center page-title">Get Weather</h1>
         <WeatherForm onSearch={this.handleSearch}/>
         {renderMessage()}
+        {renderError()}
       </div>
     );
   }

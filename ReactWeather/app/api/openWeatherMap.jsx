@@ -10,9 +10,11 @@ let getTemp = (location) => {
   return new Promise((resolve, reject) => {
     axios.get(url)
       .then((res) => {
-        debugger;
-        resolve(res.data.main.temp);
-      }).catch(e => reject(e));
+        if(res.data.cod && res.data.message)
+          reject(res);
+        else
+          resolve(res.data.main.temp);
+    }).catch((e) => reject(e));
   });
 };
 
