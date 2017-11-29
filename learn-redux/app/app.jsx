@@ -1,7 +1,7 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let MainApp = requier('MainApp');
+let MainApp = require('MainApp');
 
 // Load foundation
 require('style!css!foundation-sites/dist/css/foundation.min.css');
@@ -15,3 +15,6 @@ ReactDOM.render(
   <MainApp/>,
   document.getElementById('app')
 );
+
+require('./redux-example.jsx');
+// require('./redux-todo-example.jsx');
