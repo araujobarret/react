@@ -1,7 +1,7 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let TodoApp = require('TodoApp');
+let MainApp = requier('MainApp');
 
 // Load foundation
 require('style!css!foundation-sites/dist/css/foundation.min.css');
@@ -12,6 +12,6 @@ $(document).foundation();
 require('style!css!sass!applicationStyles');
 
 ReactDOM.render(
-  <TodoApp/>,
+  <MainApp/>,
   document.getElementById('app')
 );
