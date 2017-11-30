@@ -2,69 +2,11 @@ const redux = require('redux');
 
 console.log("Starting redux example");
 
-let stateDefault = {
-  name: 'Anonymous',
-  hobbies: [],
-  movies: []
-}
-
 let nextHobbyId = 1;
 let nextMovieId = 1;
 
-let oldReducer = (state = stateDefault, action) => {
-  // state = state || {name: 'Anonymou'};
-
-  switch(action.type) {
-    case 'CHANGE_NAME': return Object.assign({}, state, { name:action.name });
-    case 'ADD_HOBBY': return Object.assign(
-      {},
-      state,
-      {
-        hobbies:
-        [
-          ...state.hobbies,
-          {
-            id: nextHobbyId++,
-            hobby: action.hobby
-          }
-        ]
-      }
-    );
-    case 'ADD_MOVIE': return Object.assign(
-      {},
-      state,
-      {
-        movies:
-        [
-          ...state.movies,
-          {
-            id: nextMovieId++,
-            movie: action.movie,
-            genre: action.genre
-          }
-        ]
-      }
-    );
-    case 'REMOVE_HOBBY': return Object.assign(
-      {},
-      state,
-      {
-        hobbies: state.hobbies.filter((hobby) => hobby.id !== action.id)
-      }
-    );
-    case 'REMOVE_MOVIE': return Object.assign(
-      {},
-      state,
-      {
-        movies: state.hobbies.filter((movie) => movie.id !== action.id)
-      }
-    );
-    default: return state;
-  }
-
-  return state;
-};
-
+// Name reducer and action generators
+// ---------------
 let nameReducer = (state = 'Anonymous', action) => {
   switch(action.type) {
     case 'CHANGE_NAME':
@@ -74,6 +16,15 @@ let nameReducer = (state = 'Anonymous', action) => {
   }
 };
 
+let changeName = (name) => {
+  return {
+    type: 'CHANGE_NAME',
+    name
+  };
+};
+
+// Hobbies reducer and action generators
+// ---------------
 let hobbiesReducer = (state = [], action) => {
   switch(action.type){
     case 'ADD_HOBBY':
@@ -91,6 +42,22 @@ let hobbiesReducer = (state = [], action) => {
   }
 };
 
+let addHobby = (hobby) => {
+  return {
+    type: 'ADD_HOBBY',
+    hobby
+  };
+};
+
+let removeHobby = (id) => {
+  return {
+    type: 'REMOVE_HOBBY',
+    id
+  }
+};
+
+// Hobbies reducer and action generators
+// ---------------
 let moviesReducer = (state = [], action) => {
   switch(action.type) {
     case 'ADD_MOVIE':
@@ -107,6 +74,21 @@ let moviesReducer = (state = [], action) => {
     default:
       return state;
   }
+};
+
+let addMovie = (movie, genre) => {
+  return {
+    type: 'ADD_MOVIE',
+    movie,
+    genre
+  };
+};
+
+let removeMovie = (id) => {
+  return {
+    type: 'REMOVE_MOVIE',
+    id
+  };
 };
 
 let reducer = redux.combineReducers({
@@ -127,41 +109,15 @@ let subscription = store.subscribe(() => {
 let currentState = store.getState();
 console.log('currentState', store.getState());
 
-store.dispatch({
-  type: 'CHANGE_NAME',
-  name: 'Andrew'
-});
+store.dispatch(changeName('Andrew'));
+store.dispatch(changeName('Carlos'));
 
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'Play basketball'
-});
+store.dispatch(addHobby('Play Basketball'));
+store.dispatch(addHobby('Ride Bike'));
+store.dispatch(removeHobby(2));
 
-store.dispatch({
-  type: 'ADD_HOBBY',
-  hobby: 'Ride Bike'
-});
-
-store.dispatch({
-  type: 'REMOVE_HOBBY',
-  id: 2
-});
-
-store.dispatch({
-  type: "ADD_MOVIE",
-  movie: 'Back to the Future',
-  genre: 'SciFy'
-});
-
-store.dispatch({
-  type: "ADD_MOVIE",
-  movie: 'Back to the Future 2',
-  genre: 'SciFy'
-});
-
-store.dispatch({
-  type: 'REMOVE_MOVIE',
-  id: 2
-});
+store.dispatch(addMovie('Back to the Future', 'SciPi'));
+store.dispatch(addMovie('Back to the Future 2', 'SciPi'));
+store.dispatch(removeMovie(2));
 
 // subscription();
