@@ -12,7 +12,7 @@ export let configure = () => {
   });
 
   let store = redux.createStore(reducer, redux.compose(
-    redux.applyMiddleware(thunk), // Actions which are objects
+    redux.applyMiddleware(thunk), // Actions which are objects, executing a dispatch from an action
     window.devToolsExtension ? window.devToolsExtension() : f => f
   ));
 

@@ -10,7 +10,7 @@ export let searchTextReducer = (state = '', action) => {
   };
 };
 
-export let showCompleted = (state = false, action) => {
+export let showCompletedReducer = (state = false, action) => {
   switch(action.type) {
     case 'TOGGLE_SHOW_COMPLETED':
       return !state;
@@ -26,7 +26,7 @@ export let todosReducer = (state = [], action) => {
         ...state,
         {
           id: uuid(),
-          text: text,
+          text: action.text,
           completed: false,
           createdAt: moment().unix(),
           completedAt: null
